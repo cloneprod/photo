@@ -37,6 +37,7 @@
       overflow: hidden;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s ease;
+      cursor: pointer;
     }
 
     .image-card img {
@@ -47,6 +48,28 @@
 
     .image-card:hover {
       transform: scale(1.02);
+    }
+
+    /* Modal / Lightbox */
+    #modal {
+      display: none; /* gizli */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    #modal img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.7);
     }
 
     @media (max-width: 600px) {
@@ -61,19 +84,40 @@
   <header>Clone Production</header>
   <main id="gallery"></main>
 
+  <!-- Modal -->
+  <div id="modal">
+    <img src="" alt="Büyük Görsel" />
+  </div>
+
   <script>
     async function fetchData() {
       try {
         const res = await fetch("data/poses.json");
         const images = await res.json();
         const gallery = document.getElementById("gallery");
+        const modal = document.getElementById("modal");
+        const modalImg = modal.querySelector("img");
 
         images.forEach(img => {
           const card = document.createElement("div");
           card.className = "image-card";
           card.innerHTML = `<img src="${img.path}" alt="Galeri Fotoğrafı">`;
+
+          // Fotoğrafa tıklanınca modalda göster
+          card.onclick = () => {
+            modal.style.display = "flex";
+            modalImg.src = img.path;
+            modalImg.alt = "Büyük Görsel";
+          };
+
           gallery.appendChild(card);
         });
+
+        // Modal tıklayınca kapansın
+        modal.onclick = () => {
+          modal.style.display = "none";
+          modalImg.src = "";
+        };
       } catch (e) {
         console.error("Veri alınırken hata oluştu:", e);
       }

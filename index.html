@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clone Production Galeri</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #1e1e1e;
+      color: #fff;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .image-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .image-card:hover {
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 1.5rem;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>Clone Production</header>
+  <main id="gallery"></main>
+
+  <script>
+    async function fetchData() {
+      try {
+        const res = await fetch("data/poses.json");
+        const images = await res.json();
+        const gallery = document.getElementById("gallery");
+
+        images.forEach(img => {
+          const card = document.createElement("div");
+          card.className = "image-card";
+          card.innerHTML = `<img src="${img.path}" alt="Galeri Fotoğrafı">`;
+          gallery.appendChild(card);
+        });
+      } catch (e) {
+        console.error("Veri alınırken hata oluştu:", e);
+      }
+    }
+
+    fetchData();
+  </script>
+</body>
+</html>
